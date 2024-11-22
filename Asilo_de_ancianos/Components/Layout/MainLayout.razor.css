@@ -5,12 +5,13 @@
     box-sizing: border-box;
 }
 
-main{
-    height:100vh;
-    background-color:#fff;
-    background-image:url('img/couple.jpg');
-    background-size:cover;
-    background-position:center;
+main {
+    height: 100vh;
+    background-color: #2d345b;
+    background-image: url('img/couple.jpg');
+    background-size: cover;
+    
+    background-position: center;
 }
 
 li{
