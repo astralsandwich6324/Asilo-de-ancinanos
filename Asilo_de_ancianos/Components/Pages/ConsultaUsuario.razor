@@ -1,0 +1,92 @@
+﻿@page "/consulta"
+@using Asilo_de_ancianos.Components.Models
+@using Asilo_de_ancianos.Data
+@using Microsoft.EntityFrameworkCore
+@inject NavigationManager Navigation
+@inject AppDbContext DbContext
+@rendermode InteractiveServer
+
+<h3>Consulta de Usuario</h3>
+
+
+<div class="form-group">
+    <label for="nombre">Ingrese el Nombre del usuario</label>
+    <InputText id="nombre" class="form-control" @bind-Value="nombre" />
+</div>
+
+<div class="form-group">
+    <label for="correo">Ingrese el Correo del usuario</label>
+    <InputText id="correo" class="form-control" @bind-Value="correo" />
+</div>
+
+<div class="form-group">
+    <label for="apellido">Ingrese el Apellido del usuario</label>
+    <InputText id="apellido" class="form-control" @bind-Value="apellido" />
+</div>
+
+<div class="form-group">
+    <label for="edad">Ingrese la Edad del usuario</label>
+    <InputNumber id="edad" class="form-control" @bind-Value="edad" />
+</div>
+
+<button class="btn btn-primary" @onclick="ConsultarUsuario">Consultar</button>
+
+@if (usuario != null)
+{
+    <div class="mt-4">
+        <h4>Detalles del Usuario</h4>
+        <p><strong>ID:</strong> @usuario.Id</p>
+        <p><strong>Nombre:</strong> @usuario.Nombre</p>
+        <p><strong>Correo:</strong> @usuario.Correo</p>
+        <p><strong>Teléfono:</strong> @usuario.Telefono</p>
+        @if (!string.IsNullOrEmpty(usuario.Foto))
+        {
+            <img src="data:image/png;base64,@usuario.Foto" alt="Foto de Usuario" class="img-thumbnail" />
+        }
+        else
+        {
+            <p>No hay foto disponible.</p>
+        }
+    </div>
+}
+
+@code {
+    private string nombre;
+    private string correo;
+    private string apellido;
+    private int? edad;  
+    private Usuario usuario;
+
+    private async Task ConsultarUsuario()
+    {
+        
+        var query = DbContext.CollecionUsuarios.AsQueryable();
+
+        
+        if (!string.IsNullOrEmpty(nombre))
+        {
+            query = query.Where(u => u.Nombre.Contains(nombre));
+        }
+        if (!string.IsNullOrEmpty(correo))
+        {
+            query = query.Where(u => u.Correo.Contains(correo));
+        }
+        if (!string.IsNullOrEmpty(apellido))
+        {
+            query = query.Where(u => u.Apellido.Contains(apellido));
+        }
+        if (edad.HasValue)
+        {
+            query = query.Where(u => u.Edad == edad.Value);
+        }
+
+        
+        usuario = await query.FirstOrDefaultAsync();
+
+        if (usuario == null)
+        {
+            
+            usuario = null;  /
+        }
+    }
+}
