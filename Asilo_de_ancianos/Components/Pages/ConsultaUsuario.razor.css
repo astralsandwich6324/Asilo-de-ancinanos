@@ -1,0 +1,48 @@
+﻿/* Formulario de consulta */
+.card {
+    margin-top: 50px;
+    border-radius: 8px;
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+h3 {
+    font-weight: bold;
+    color: #fff;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    font-size: 1.1rem;
+}
+
+    button:hover {
+        background-color: #ff6f00;
+        transition: background-color 0.3s ease;
+    }
+
+input.form-control {
+    border-radius: 4px;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.alert {
+    font-size: 1.1rem;
+    font-weight: bold;
+}

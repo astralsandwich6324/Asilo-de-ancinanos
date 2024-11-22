@@ -2,115 +2,94 @@
 @using System;
 @using Asilo_de_ancianos.Components.Models
 @using Asilo_de_ancianos.Data
-@using System.IO;
 @inject NavigationManager Navigation
 @inject AppDbContext DbContext
-@rendermode InteractiveServer
 @inject IJSRuntime JSRuntime
+@rendermode InteractiveServer
 
+<h3 class="text-center mb-4 mt-5">Registrar Usuario</h3>
 
-<h3>Registrar Usuario</h3>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <EditForm Model="@usuario" OnValidSubmit="RegistrarUsuario">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
 
-<EditForm Model="@usuario" OnValidSubmit="RegistrarUsuario">
-    <DataAnnotationsValidator  />
-    <ValidationSummary  />
+                        <div class="form-group mb-3">
+                            <label for="nombre">Nombre</label>
+                            <InputText id="nombre" class="form-control" @bind-Value="usuario.Nombre" />
+                        </div>
 
-    <div class="form-group">
-        <label for="nombre">Nombre</label>
-        <InputText id="nombre" class="form-control" @bind-Value="usuario.Nombre" />
+                        <div class="form-group mb-3">
+                            <label for="apellido">Apellido</label>
+                            <InputText id="apellido" class="form-control" @bind-Value="usuario.Apellido" />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="edad">Edad</label>
+                            <InputNumber id="edad" class="form-control" @bind-Value="usuario.Edad" />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="correo">Correo</label>
+                            <InputText id="correo" class="form-control" @bind-Value="usuario.Correo" />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="telefono">Teléfono</label>
+                            <InputText id="telefono" class="form-control" @bind-Value="usuario.Telefono" />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="foto">Foto</label>
+                            <InputText id="foto" class="form-control" @bind-Value="usuario.Foto" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">Registrar</button>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="form-group">
-        <label for="apellido">Apellido</label>
-        <InputText id="apellido" class="form-control" @bind-Value="usuario.Apellido" />
-    </div>
-
-    <div class="form-group">
-        <label for="edad">Edad</label>
-        <InputNumber id="edad" class="form-control" @bind-Value="usuario.Edad" />
-    </div>
-
-    <div class="form-group">
-        <label for="correo">Correo</label>
-        <InputText id="correo" class="form-control" @bind-Value="usuario.Correo" />
-    </div>
-
-    <div class="form-group">
-        <label for="telefono">Teléfono</label>
-        <InputText id="telefono" class="form-control" @bind-Value="usuario.Telefono" />
-    </div>
-
-    <div class="form-group">
-        <label for="foto">Foto</label>
-        <InputText id="foto" class="form-control" @bind-Value="usuario.Foto" />
-    </div>
-
-    <button type="submit" class="btn btn-primary" @onclick="RegistrarUsuario">Registrar</button>
-    
-
-</EditForm>
+</div>
 
 <div id="loading" style="display:none;">Cargando...</div>
 
 @code {
-
     [Parameter] public int Id { get; set; }
-
     private Usuario usuario = new Usuario();
-
-    // private async Task OnFotoChange(InputFileChangeEventArgs e)
-    // {
-    //     var file = e.File;
-    //     var buffer = new byte[file.Size];
-    //     await file.OpenReadStream().ReadAsync(buffer);
-    //     usuario.Foto = Convert.ToBase64String(buffer);  
-    // }
 
     private async Task RegistrarUsuario()
     {
-        
         await JSRuntime.InvokeVoidAsync("showLoading");
 
         try
         {
-            
             if (usuario.Id > 0)
             {
-                
                 DbContext.CollecionUsuarios.Update(usuario);
             }
             else
             {
-                
                 DbContext.CollecionUsuarios.Add(usuario);
             }
 
-            
-            await Task.Delay(2000); 
-
-            
+            await Task.Delay(2000);
             await DbContext.SaveChangesAsync();
-
-            
             await JSRuntime.InvokeVoidAsync("hideLoading");
-
-            
             await JSRuntime.InvokeVoidAsync("showAlert", "¡Usuario registrado con éxito!");
-
-            
             usuario = new Usuario();
-
-            
             StateHasChanged();
         }
         catch (Exception ex)
         {
-            
             await JSRuntime.InvokeVoidAsync("hideLoading");
             await JSRuntime.InvokeVoidAsync("showAlert", $"Error: {ex.Message}");
         }
     }
-
 
     protected override void OnInitialized()
     {
@@ -120,5 +99,3 @@
         }
     }
 }
-
-
